@@ -1,0 +1,6 @@
+[Pod]
+PodName=homeassistant
+PublishPort=1883:1883
+PublishPort=9001:9001
+PublishPort=8091:8091
+PublishPort=8123:8123

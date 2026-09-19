@@ -1,0 +1,13 @@
+[Unit]
+Description=CloudFlare Tunnel
+
+[Container]
+Pod=%i.pod
+ContainerName=%i_cloudflared
+Image=docker.io/cloudflare/cloudflared:latest
+AutoUpdate=registry
+
+Secret=cloudflare_%i_token,type=env,target=TUNNEL_TOKEN
+
+[Install]
+WantedBy=default.target

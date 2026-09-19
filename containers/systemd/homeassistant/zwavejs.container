@@ -1,0 +1,17 @@
+[Unit]
+Description=ZWaveJS Z-Wave Server
+
+[Container]
+Pod=homeassistant.pod
+ContainerName=zwavejs
+Image=docker.io/zwavejs/zwave-js-ui:latest
+AutoUpdate=registry
+
+AddDevice=/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00:/dev/zwave
+
+Volume=zwavejs.volume:/usr/src/app/store
+
+Environment=TZ=America/Los_Angeles
+
+[Install]
+WantedBy=default.target
