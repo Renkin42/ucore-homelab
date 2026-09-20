@@ -1,6 +1,7 @@
 [Unit]
 Description=Vaultwarden Password Manager
 After=couldflared@vaultwarden.service
+
 [Container]
 Pod=vaultwarden.pod
 ContainerName=vaultwarden
@@ -9,7 +10,7 @@ AutoUpdate=registry
 
 Volume=vaultwarden.volume:/data
 
-Secret=vaultwarden_admin_token,type=env,target=ADMIN_TOKEN
+Secret=vaultwarden-admin-token,type=env,target=ADMIN_TOKEN
 
 [Install]
 WantedBy=default.target
