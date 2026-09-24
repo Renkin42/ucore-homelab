@@ -26,7 +26,7 @@ storage:
   filesystems:
     - path: /var/home/users/core/.local/share/containers/storage
       # Not sure if this will work. Depends on how stuff is passed to mkfs. Maybe?
-      device: /dev/disk/by-partlabel/raid.1.1 /dev/disk/by-partlabel/raid.1.2
+      device: "/dev/disk/by-partlabel/raid.1.1 /dev/disk/by-partlabel/raid.1.2"
       format: btrfs
       label: container-storage
       options:
@@ -39,6 +39,95 @@ storage:
   directories:
     - path: /etc/ucore-autorebase
       mode: 0754
+    - path: /home/core/.config/containers
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd/foundryvtt
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd/homeassistant
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd/vaultwarden
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd/workcal
+      user:
+        name: core
+      group:
+        name: core
+  files:
+    - path: /home/core/.config/containers/storage.conf
+      contents:
+        inline: |
+          [storage]
+          driver = "btrfs"
+        user:
+          name: core
+        group:
+          name: core
+    - path: /home/core/.config/containers/systemd/foundryvtt/foundryvtt.volume
+      contents:
+        inline: |
+          [Volume]
+        user:
+          name: core
+        group:
+          name: core
+    - path: /home/core/.config/containers/systemd/homeassistant/homeassistant.volume
+      contents:
+        inline: |
+          [Volume]
+        user:
+          name: core
+        group:
+          name: core
+    - path: /home/core/.config/containers/systemd/homeassistant/mosquitto.volume
+      contents:
+        inline: |
+          [Volume]
+        user:
+          name: core
+        group:
+          name: core
+    - path: /home/core/.config/containers/systemd/homeassistant/zwavejs.volume
+      contents:
+        inline: |
+          [Volume]
+        user:
+          name: core
+        group:
+          name: core
+    - path: /home/core/.config/containers/systemd/vaultwarden/vaultwarden.volume
+      contents:
+        inline: |
+          [Volume]
+        user:
+          name: core
+        group:
+          name: core
+    - path: /home/core/.config/containers/systemd/workcal/workcal.volume
+      contents:
+        inline: |
+          [Volume]
+        user:
+          name: core
+        group:
+          name: core
+
 systemd:
   units:
     - name: ucore-unsigned-autorebase.service
