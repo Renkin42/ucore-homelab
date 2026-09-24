@@ -7,6 +7,35 @@ passwd:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP/MK+0IbBRjPc4x7FK/eTKzSPvQNabDxQHiIdbhwT/1
       password_hash: $passhash
 storage:
+  disks:
+      # TODO: Update disk ids
+    - device: /dev/disk/by-id/aaaaaaaa
+      wipe_table: true
+      partitions:
+        - label: "raid.1.1"
+          number: 1
+          size_mib: 0
+          start_mib: 0
+    - device: /dev/disk/by-id/bbbbbbbb
+      wipe_table: true
+      partitions:
+        - label: "raid.1.2"
+          number: 1
+          size_mib: 0
+          start_mib: 0
+  filesystems:
+    - path: /var/home/users/core/.local/share/containers/storage
+      # Not sure if this will work. Depends on how stuff is passed to mkfs. Maybe?
+      device: /dev/disk/by-partlabel/raid.1.1 /dev/disk/by-partlabel/raid.1.2
+      format: btrfs
+      label: container-storage
+      options:
+        - "-m raid1"
+        - "-d raid1"
+      mount_options:
+        - "compress=zstd"
+        - "subvol=@"
+      with_mount_unit: true 
   directories:
     - path: /etc/ucore-autorebase
       mode: 0754
