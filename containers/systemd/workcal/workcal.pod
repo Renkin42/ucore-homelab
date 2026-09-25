@@ -1,0 +1,3 @@
+[Pod]
+PodName=workcal
+PublishPort=5232:5232
