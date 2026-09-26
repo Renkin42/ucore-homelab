@@ -1,0 +1,26 @@
+name: Build and Release Ignition File
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container: fedora:latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Install Dependencies
+        run: |
+          dnf -y update
+          dnf -y install butane gh
+      - name: Create Ignition File
+        run: |
+          butane ucore-autorebase.butane > config.ign
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: config.ign
