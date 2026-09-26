@@ -1,10 +1,9 @@
 # ucore-homelab
 
 ## Butane Secrets
-Secrets such as the login password hash are stored in environment variables which are substituted before processing.
+Secrets such as the login password hash are stored in environment variables which are substituted into the ignition file before installation
 ```
 export passhash=$(mkpasswd --method=yescrypt)
-envsubst < ucore-autorebase.butane > out.butane
-unset passhash
-podman run --interactive --rm quay.io/coreos/butane:release --pretty --strict < out.butane > config.ign
+curl -L https://github.com/Renkin42/ucore-homelab/releases/latest/download/config.ign | envsubst > config.ign
+coreos-installer install -i config.ign <<ROOT_DEVICE>>
 ```
