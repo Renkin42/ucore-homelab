@@ -74,6 +74,7 @@ storage:
       contents:
         inline: |
           [storage]
+          
           driver = "btrfs"
         user:
           name: core
