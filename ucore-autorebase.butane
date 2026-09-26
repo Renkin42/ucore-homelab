@@ -9,14 +9,14 @@ passwd:
 storage:
   disks:
       # TODO: Update disk ids
-    - device: /dev/disk/by-id/aaaaaaaa
+    - device: /dev/disk/by-id/$diskaid
       wipe_table: true
       partitions:
         - label: "raid.1.1"
           number: 1
           size_mib: 0
           start_mib: 0
-    - device: /dev/disk/by-id/bbbbbbbb
+    - device: /dev/disk/by-id/$diskbid
       wipe_table: true
       partitions:
         - label: "raid.1.2"
@@ -70,14 +70,14 @@ storage:
       group:
         name: core
   files:
-    - path: /etc/NetworkManager/system-connections/enp1s0.nmconnection
+    - path: /etc/NetworkManager/system-connections/$ethname.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=enp1s0
+          id=$ethname
           type=ethernet
-          interface-name=enp1s0
+          interface-name=$ethname
           [ipv4]
           address1=172.21.85.5/24,172.21.85.1
           dns=8.8.8.8;
