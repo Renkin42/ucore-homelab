@@ -25,13 +25,9 @@ storage:
           start_mib: 0
   filesystems:
     - path: /var/home/users/core/.local/share/containers/storage
-      # Not sure if this will work. Depends on how stuff is passed to mkfs. Maybe?
-      device: "/dev/disk/by-partlabel/raid.1.1 /dev/disk/by-partlabel/raid.1.2"
+      device: /dev/disk/by-partlabel/raid.1.1
       format: btrfs
       label: container-storage
-      options:
-        - "-m raid1"
-        - "-d raid1"
       mount_options:
         - "compress=zstd"
         - "subvol=@"
