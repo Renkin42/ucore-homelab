@@ -24,7 +24,7 @@ storage:
           size_mib: 0
           start_mib: 0
   filesystems:
-    - path: /var/home/users/core/.local/share/containers/storage
+    - path: /var/lib/containers/storage
       device: /dev/disk/by-partlabel/raid.1.1
       format: btrfs
       label: container-storage
@@ -35,36 +35,12 @@ storage:
   directories:
     - path: /etc/ucore-autorebase
       mode: 0754
-    - path: /home/core/.config/containers
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.config/containers/systemd
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.config/containers/systemd/foundryvtt
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.config/containers/systemd/homeassistant
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.config/containers/systemd/vaultwarden
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.config/containers/systemd/workcal
-      user:
-        name: core
-      group:
-        name: core
+    - path: /etc/containers
+    - path: /etc/containers/systemd
+    - path: /etc/containers/systemd/foundryvtt
+    - path: /etc/containers/systemd/homeassistant
+    - path: /etc/containers/systemd/vaultwarden
+    - path: /etc/containers/systemd/workcal
   files:
     - path: /etc/NetworkManager/system-connections/$ethname.nmconnection
       mode: 0600
@@ -80,64 +56,36 @@ storage:
           dns-search=
           may-fail=false
           method=manual
-    - path: /home/core/.config/containers/storage.conf
+    - path: /etc/containers/storage.conf
       contents:
         inline: |
           [storage]
           
           driver = "btrfs"
-        user:
-          name: core
-        group:
-          name: core
-    - path: /home/core/.config/containers/systemd/foundryvtt/foundryvtt.volume
+    - path: /etc/containers/systemd/foundryvtt/foundryvtt.volume
       contents:
         inline: |
           [Volume]
-        user:
-          name: core
-        group:
-          name: core
-    - path: /home/core/.config/containers/systemd/homeassistant/homeassistant.volume
+    - path: /etc/containers/systemd/homeassistant/homeassistant.volume
       contents:
         inline: |
           [Volume]
-        user:
-          name: core
-        group:
-          name: core
-    - path: /home/core/.config/containers/systemd/homeassistant/mosquitto.volume
+    - path: /etc/containers/systemd/homeassistant/mosquitto.volume
       contents:
         inline: |
           [Volume]
-        user:
-          name: core
-        group:
-          name: core
-    - path: /home/core/.config/containers/systemd/homeassistant/zwavejs.volume
+    - path: /etc/containers/systemd/homeassistant/zwavejs.volume
       contents:
         inline: |
           [Volume]
-        user:
-          name: core
-        group:
-          name: core
-    - path: /home/core/.config/containers/systemd/vaultwarden/vaultwarden.volume
+    - path: /etc/containers/systemd/vaultwarden/vaultwarden.volume
       contents:
         inline: |
           [Volume]
-        user:
-          name: core
-        group:
-          name: core
-    - path: /home/core/.config/containers/systemd/workcal/workcal.volume
+    - path: /etc/containers/systemd/workcal/workcal.volume
       contents:
         inline: |
           [Volume]
-        user:
-          name: core
-        group:
-          name: core
 
 systemd:
   units:
