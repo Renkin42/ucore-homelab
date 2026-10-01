@@ -19,7 +19,7 @@ jobs:
           dnf -y install butane gh
       - name: Create Ignition File
         run: |
-          butane ucore-autorebase.butane > config.ign
+          butane ucore-autorebase.butane -d ./ -o config.ign
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
