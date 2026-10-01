@@ -39,7 +39,7 @@ storage:
     - path: /etc/ucore-autorebase
       mode: 0754
   trees:
-    - path: /etc/
+    - path: /etc/containers
       local: containers
       file_mode: 0664
       dir_mode: 0664
