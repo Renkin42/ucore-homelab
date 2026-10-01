@@ -6,7 +6,8 @@ passwd:
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP/MK+0IbBRjPc4x7FK/eTKzSPvQNabDxQHiIdbhwT/1
       password_hash: $passhash
-      groups: podmanconfig
+      groups: 
+        - podmanconfig
   groups:
     - name: podmanconfig
 storage:
