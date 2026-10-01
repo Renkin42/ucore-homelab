@@ -6,6 +6,9 @@ passwd:
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP/MK+0IbBRjPc4x7FK/eTKzSPvQNabDxQHiIdbhwT/1
       password_hash: $passhash
+      groups: podman-config
+  groups:
+    - name: podman-config
 storage:
   disks:
       # TODO: Update disk ids
@@ -35,12 +38,15 @@ storage:
   directories:
     - path: /etc/ucore-autorebase
       mode: 0754
-    - path: /etc/containers
-    - path: /etc/containers/systemd
-    - path: /etc/containers/systemd/foundryvtt
-    - path: /etc/containers/systemd/homeassistant
-    - path: /etc/containers/systemd/vaultwarden
-    - path: /etc/containers/systemd/workcal
+  trees:
+    - path: /etc/
+      local: containers
+      file_mode: 0664
+      dir_mode: 0664
+      user:
+        name: root
+      group:
+        name: podman-config
   files:
     - path: /etc/NetworkManager/system-connections/$ethname.nmconnection
       mode: 0600
@@ -56,36 +62,6 @@ storage:
           dns-search=
           may-fail=false
           method=manual
-    - path: /etc/containers/storage.conf
-      contents:
-        inline: |
-          [storage]
-          
-          driver = "btrfs"
-    - path: /etc/containers/systemd/foundryvtt/foundryvtt.volume
-      contents:
-        inline: |
-          [Volume]
-    - path: /etc/containers/systemd/homeassistant/homeassistant.volume
-      contents:
-        inline: |
-          [Volume]
-    - path: /etc/containers/systemd/homeassistant/mosquitto.volume
-      contents:
-        inline: |
-          [Volume]
-    - path: /etc/containers/systemd/homeassistant/zwavejs.volume
-      contents:
-        inline: |
-          [Volume]
-    - path: /etc/containers/systemd/vaultwarden/vaultwarden.volume
-      contents:
-        inline: |
-          [Volume]
-    - path: /etc/containers/systemd/workcal/workcal.volume
-      contents:
-        inline: |
-          [Volume]
 
 systemd:
   units:
@@ -101,7 +77,7 @@ systemd:
         [Service]
         Type=oneshot
         StandardOutput=journal+console
-        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-unverified-registry:ghcr.io/ublue-os/ucore:stable
+        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-unverified-registry:ghcr.io/ublue-os/ucore:stable-nvidia
         ExecStart=/usr/bin/touch /etc/ucore-autorebase/unverified
         ExecStart=/usr/bin/systemctl disable ucore-unsigned-autorebase.service
         ExecStart=/usr/bin/systemctl reboot
@@ -119,7 +95,7 @@ systemd:
         [Service]
         Type=oneshot
         StandardOutput=journal+console
-        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/ublue-os/ucore:stable
+        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/ublue-os/ucore:stable-nvidia
         ExecStart=/usr/bin/touch /etc/ucore-autorebase/signed
         ExecStart=/usr/bin/systemctl disable ucore-signed-autorebase.service
         ExecStart=/usr/bin/systemctl reboot
