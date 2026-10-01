@@ -11,14 +11,14 @@ jobs:
       contents: write
     container: fedora:latest
     steps:
+      - name: Install Dependencies
+        run: |
+          #dnf -y update
+          dnf -y install butane git
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
           submodules: true
-      - name: Install Dependencies
-        run: |
-          dnf -y update
-          dnf -y install butane gh
       - name: Create Ignition File
         run: |
           butane ucore-autorebase.butane -d ./ -o config.ign
