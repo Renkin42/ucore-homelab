@@ -6,12 +6,11 @@ passwd:
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP/MK+0IbBRjPc4x7FK/eTKzSPvQNabDxQHiIdbhwT/1
       password_hash: $passhash
-      groups: podman-config
+      groups: podmanconfig
   groups:
-    - name: podman-config
+    - name: podmanconfig
 storage:
   disks:
-      # TODO: Update disk ids
     - device: /dev/disk/by-id/$diskaid
       wipe_table: true
       partitions:
@@ -46,7 +45,7 @@ storage:
       user:
         name: root
       group:
-        name: podman-config
+        name: podmanconfig
   files:
     - path: /etc/NetworkManager/system-connections/$ethname.nmconnection
       mode: 0600
