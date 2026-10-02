@@ -100,6 +100,13 @@ systemd:
         ExecStart=/usr/bin/btrfs device add /dev/disks/partlabel/raid.1.2 /var/lib/containers/storage
         ExecStart=/usr/bin/btrfs balance -dconvert=raid1 -mconvert=raid1 /var/lib/containers/storage
         ExecStart=/usr/bin/touch /etc/ucore-autorebase/raid-converted
+    - name: podman-run.target
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Target for podman containers
+        [Install]
+        WantedBy=multi-user.target
     - name: copy-podman-backups.service
       enabled: true
       contents: |
