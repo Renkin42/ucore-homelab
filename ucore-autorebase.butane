@@ -11,6 +11,30 @@ passwd:
   groups:
     - name: podmanconfig
 storage:
+  disks:
+    - device: /dev/disk/by-id/$diskaid
+      wipe_table: true
+      partitions:
+        - label: "raid.1.1"
+          number: 1
+          size_mib: 0
+          start_mib: 0
+    - device: /dev/disk/by-id/$diskbid
+      wipe_table: true
+      partitions:
+        - label: "raid.1.2"
+          number: 1
+          size_mib: 0
+          start_mib: 0
+  filesystems:
+    - path: /var/lib/containers/storage
+      device: /dev/disk/by-partlabel/raid.1.1
+      format: btrfs
+      label: container-storage
+      mount_options:
+        - "compress=zstd"
+        - "subvol=@"
+      with_mount_unit: true
   directories:
     - path: /etc/ucore-autorebase
       mode: 0754
@@ -64,6 +88,18 @@ systemd:
         ExecStart=/usr/bin/systemctl reboot
         [Install]
         WantedBy=multi-user.target
+    - name: btrfs-convert-raid1.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Converts the single disk btrfs to raid1
+        ConditionPathExists=!/etc/ucore-autorebase/raid-converted
+        [Service]
+        Type=oneshot
+        StandardOutput=journal+console
+        ExecStart=/usr/bin/btrfs device add /dev/disks/partlabel/raid.1.2 /var/lib/containers/storage
+        ExecStart=/usr/bin/btrfs balance -dconvert=raid1 -mconvert=raid1 /var/lib/containers/storage
+        ExecStart=/usr/bin/touch /etc/ucore-autorebase/raid-converted
     - name: copy-podman-backups.service
       enabled: true
       contents: |
