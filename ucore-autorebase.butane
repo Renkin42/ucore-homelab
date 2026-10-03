@@ -60,7 +60,7 @@ systemd:
       contents_local: services/ucore-signed-autorebase.service
     - name: btrfs-convert-raid1.service
       enabled: true
-      contents_local: services/btrfs-convert/raid1.service
+      contents_local: services/btrfs-convert-raid1.service
     - name: podman-start.target
       enabled: true
       contents_local: services/podman-start.target
