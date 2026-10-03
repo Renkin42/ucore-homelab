@@ -1,27 +1,27 @@
 name: Build and Release Ignition File
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    container: fedora:latest
     steps:
-      - name: Install Dependencies
-        run: |
-          #dnf -y update
-          dnf -y install butane git
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
           submodules: true
       - name: Create Ignition File
+        uses: docker://quay.io/coreos/butane:release
         run: |
           butane ucore-autorebase.butane -d ./ -o config.ign
+      - name: Automatically increment tag
+        uses: phish108/autotag-action@v1.1.55
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN}}
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
