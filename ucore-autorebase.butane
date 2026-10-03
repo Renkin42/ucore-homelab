@@ -54,90 +54,16 @@ systemd:
   units:
     - name: ucore-unsigned-autorebase.service
       enabled: true
-      contents: |
-        [Unit]
-        Description=uCore autorebase to unsigned OCI and reboot
-        ConditionPathExists=!/etc/ucore-autorebase/unverified
-        ConditionPathExists=!/etc/ucore-autorebase/signed
-        After=network-online.target
-        Wants=network-online.target
-        [Service]
-        Type=oneshot
-        StandardOutput=journal+console
-        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-unverified-registry:ghcr.io/ublue-os/ucore:stable-nvidia
-        ExecStart=/usr/bin/touch /etc/ucore-autorebase/unverified
-        ExecStart=/usr/bin/systemctl disable ucore-unsigned-autorebase.service
-        ExecStart=/usr/bin/systemctl reboot
-        [Install]
-        WantedBy=multi-user.target
+      contents_local: services/ucore-unsigned-autorebase.service
     - name: ucore-signed-autorebase.service
       enabled: true
-      contents: |
-        [Unit]
-        Description=uCore autorebase to signed OCI and reboot
-        ConditionPathExists=/etc/ucore-autorebase/unverified
-        ConditionPathExists=!/etc/ucore-autorebase/signed
-        After=network-online.target
-        Wants=network-online.target
-        [Service]
-        Type=oneshot
-        StandardOutput=journal+console
-        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/ublue-os/ucore:stable-nvidia
-        ExecStart=/usr/bin/touch /etc/ucore-autorebase/signed
-        ExecStart=/usr/bin/systemctl disable ucore-signed-autorebase.service
-        ExecStart=/usr/bin/systemctl reboot
-        [Install]
-        WantedBy=multi-user.target
+      contents_local: services/ucore-signed-autorebase.service
     - name: btrfs-convert-raid1.service
       enabled: true
-      contents: |
-        [Unit]
-        Description=Converts the single disk btrfs to raid1
-        ConditionPathExists=!/etc/ucore-autorebase/raid-converted
-        [Service]
-        Type=oneshot
-        StandardOutput=journal+console
-        ExecStart=/usr/bin/btrfs device add /dev/disks/partlabel/raid.1.2 /var/lib/containers/storage
-        ExecStart=/usr/bin/btrfs balance -dconvert=raid1 -mconvert=raid1 /var/lib/containers/storage
-        ExecStart=/usr/bin/touch /etc/ucore-autorebase/raid-converted
-    - name: podman-run.target
+      contents_local: services/btrfs-convert/raid1.service
+    - name: podman-start.target
       enabled: true
-      contents: |
-        [Unit]
-        Description=Target for podman containers
-        [Install]
-        WantedBy=multi-user.target
+      contents_local: services/podman-start.target
     - name: copy-podman-backups.service
       enabled: true
-      contents: |
-        [Unit}
-        Description=Copy Podman Data from External Drive
-        ConditionPathExists=/etc/ucore-autorebase/signed
-        ConditionPathExists=!/etc/ucore-autorebase/backups-copied
-        ConditionPathExists=/dev/disk/by-uuid/6693591b-862e-47ed-a517-71ab745003b8
-        Requires=foundryvtt-volume.service
-        Requires=homeassistant-volume.service
-        Requires=mosquitto-volume.service
-        Requires=zwavejs-volume.service
-        Requires=vaultwarden-volume.service
-        Requires=workcal-volume.service
-        After=foundryvtt-volume.service
-        After=homeassistant-volume.service
-        After=mosquitto-volume.service
-        After=zwavejs-volume.service
-        After=vaultwarden-volume.service
-        After=workcal-volume.service
-        [Service]
-        Type=oneshot
-        StandardOutput=journal+console
-        ExecStart=/usr/bin/mount /dev/disk/by-uuid/6693591b-862e-47ed-a517-71ab745003b8 /var/mnt/backup-drive
-        ExecStart=/usr/bin/cp -r /mnt/backup-drive/backups/foundryvtt/* /var/lib/containers/storage/volumes/foundryvtt/_data
-        ExecStart=/usr/bin/cp -r /mnt/backup-drive/backups/homeassistant/* /var/lib/containers/storage/volumes/homeassistant/_data
-        ExecStart=/usr/bin/cp -r /mnt/backup-drive/backups/mosquitto/* /var/lib/containers/storage/volumes/mosquitto/_data
-        ExecStart=/usr/bin/cp -r /mnt/backup-drive/backups/zwavejs/* /var/lib/containers/storage/volumes/zwavejs/_data
-        ExecStart=/usr/bin/cp -r /mnt/backup-drive/backups/vaultwarden/* /var/lib/containers/storage/volumes/vaultwarden/_data
-        ExecStart=/usr/bin/cp -r /mnt/backup-drive/backups/workcal/* /var/lib/containers/storage/volumes/workcal/_data
-        ExecStart=/usr/bin/touch /etc/ucore-autorebase/backups-copied
-        ExecStart=/usr/bin//systemctl disable copy-podman-backups.service
-        [Install]
-        WantedBy=multi-user.target
+      contents_local:services/copy-podman-backups.service

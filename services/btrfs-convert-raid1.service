@@ -1,0 +1,12 @@
+[Unit]
+Description=Converts the single disk btrfs to raid1
+ConditionPathExists=!/etc/ucore-autorebase/raid-converted
+[Service]
+Type=oneshot
+StandardOutput=journal+console
+ExecStart=/usr/bin/btrfs device add /dev/disks/partlabel/raid.1.2 /var/lib/containers/storage
+ExecStart=/usr/bin/btrfs balance -dconvert=raid1 -mconvert=raid1 /var/lib/containers/storage
+ExecStart=/usr/bin/touch /etc/ucore-autorebase/raid-converted
+ExecStart=/usr/bin/systemctl disable btrfs-convert-raid1.service
+[Install]
+WantedBy=multi-user.target

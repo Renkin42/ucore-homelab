@@ -1,0 +1,16 @@
+[Unit]
+Description=Copy Podman Data from External Drive
+ConditionPathExists=/etc/ucore-autorebase/signed
+ConditionPathExists=!/etc/ucore-autorebase/backups-copied
+ConditionPathExists=/dev/disk/by-uuid/6693591b-862e-47ed-a517-71ab745003b8
+Requires=copy-backups-container.service
+Before=copy-backups-container.service podman-start.target
+[Service]
+Type=oneshot
+StandardOutput=journal+console
+ExecStart=/usr/bin/mount /dev/disk/by-uuid/6693591b-862e-47ed-a517-71ab745003b8 /var/mnt/backup-drive
+ExecStart=/usr/bin/cp -r /var/mnt/backup-drive/backups/secrets/* /var/lib/containers/storage/secrets
+ExecStart=/usr/bin/touch /etc/ucore-autorebase/backups-copied
+ExecStart=/usr/bin/systemctl disable copy-podman-backups.service
+[Install]
+WantedBy=podman-start.target
