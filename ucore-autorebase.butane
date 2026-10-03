@@ -66,4 +66,4 @@ systemd:
       contents_local: services/podman-start.target
     - name: copy-podman-backups.service
       enabled: true
-      contents_local:services/copy-podman-backups.service
+      contents_local: services/copy-podman-backups.service

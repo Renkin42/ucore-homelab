@@ -16,8 +16,8 @@ jobs:
           submodules: true
       - name: Create Ignition File
         uses: docker://quay.io/coreos/butane:release
-        run: |
-          butane ucore-autorebase.butane -d ./ -o config.ign
+        with:
+          args: butane ucore-autorebase.butane -d ./ -o config.ign
       - name: Automatically increment tag
         uses: phish108/autotag-action@v1.1.55
         with:
