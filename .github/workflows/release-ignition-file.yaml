@@ -19,6 +19,7 @@ jobs:
         with:
           args: ucore-autorebase.butane -d ./ -o config.ign
       - name: Automatically increment tag
+        id: tag_step
         uses: phish108/autotag-action@v1.1.55
         with:
           github-token: ${{ secrets.GITHUB_TOKEN}}
@@ -26,3 +27,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: config.ign
+          tag_name: ${{ steps.tag_step.outputs.new-tag }}
+          target_commitish: ${{ github.sha }}
+          previous_tag: ${{ steps.tag_step.outputs.tag }}
+          generate_release_notes: true
