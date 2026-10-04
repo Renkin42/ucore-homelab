@@ -11,30 +11,6 @@ passwd:
   groups:
     - name: podmanconfig
 storage:
-  disks:
-    - device: /dev/disk/by-id/$diskaid
-      wipe_table: true
-      partitions:
-        - label: "raid.1.1"
-          number: 1
-          size_mib: 0
-          start_mib: 0
-    - device: /dev/disk/by-id/$diskbid
-      wipe_table: true
-      partitions:
-        - label: "raid.1.2"
-          number: 1
-          size_mib: 0
-          start_mib: 0
-  filesystems:
-    - path: /var/lib/containers/storage
-      device: /dev/disk/by-partlabel/raid.1.1
-      format: btrfs
-      label: container-storage
-      mount_options:
-        - "compress=zstd"
-        - "subvol=@"
-      with_mount_unit: true
   directories:
     - path: /etc/ucore-autorebase
       mode: 0754
@@ -58,9 +34,6 @@ systemd:
     - name: ucore-signed-autorebase.service
       enabled: true
       contents_local: services/ucore-signed-autorebase.service
-    - name: btrfs-convert-raid1.service
-      enabled: true
-      contents_local: services/btrfs-convert-raid1.service
     - name: podman-start.target
       enabled: true
       contents_local: services/podman-start.target
