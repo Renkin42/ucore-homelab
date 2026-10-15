@@ -16,6 +16,8 @@ storage:
       mode: 0754
     - path: /var/mnt/backup-drive
       mode: 0644
+    - path: /etc/modules-load.d
+      mode: 0644
   trees:
     - path: /etc/containers
       local: containers
@@ -25,6 +27,12 @@ storage:
         name: root
       group:
         name: podmanconfig
+  files:
+    - path: /etc/modules-load.d/zfs.conf
+      contents:
+        inline: |
+          zfs
+      mode: 0644
 
 systemd:
   units:
