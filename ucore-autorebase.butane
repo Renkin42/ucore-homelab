@@ -15,14 +15,14 @@ storage:
     - path: /etc/ucore-autorebase
       mode: 0754
     - path: /var/mnt/backup-drive
-      mode: 0644
+      mode: 0755
     - path: /etc/modules-load.d
-      mode: 0644
+      mode: 0755
   trees:
     - path: /etc/containers
       local: containers
       file_mode: 0664
-      dir_mode: 0664
+      dir_mode: 0775
       user:
         name: root
       group:
